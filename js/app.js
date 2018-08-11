@@ -16,12 +16,6 @@ const modal = document.getElementById('myModal');
 document.body.onload = refresh()
 
 function refresh() {
-	//moveCounter()
-	//total = 0
-	//let counter = 0
-	//let umatchCount = 0
-	//moveCounter()
-	//totalMove.textContent = `0  Move`;
 	modal.style.display = "none";
 	for (let card of shuffle(allCards)) {
 		deck.appendChild(card)
@@ -68,8 +62,6 @@ function shuffle(array) {
 
 startGame()
 
-
-
 function startGame(){
 	for (let card of allCards) {
 		card.addEventListener("click", function(){
@@ -78,11 +70,8 @@ function startGame(){
 			moveCounter()
 			startTime(umatchCount)
 			showModal(counter)
-			console.log(umatchCount-(counter*0.5))
-			//console.log(startGame())
 		})
 	}
-//return 1
 }
 
 
