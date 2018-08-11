@@ -161,7 +161,7 @@ h1 {
 
 
 /*
- * Styles for the Score Panel
+ * Styles for the modal
  */
 
 
@@ -222,6 +222,10 @@ h1 {
     margin: 4px 2px;
     cursor: pointer;
 }
+
+/*
+ * Styles for media queries
+ */
 
  @media screen and (min-width: 0px) and (max-width: 400px) {
     .deck {
