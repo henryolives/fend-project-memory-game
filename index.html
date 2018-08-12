@@ -18,16 +18,16 @@
 
         <section class="score-panel">
         	<ul class="stars">
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
+        		<li class="star"><i class="fa fa-star"></i></li>
+        		<li class="star"><i class="fa fa-star"></i></li>
+        		<li class="star"><i class="fa fa-star"></i></li>
         	</ul>
 			
         	<span class="moves">0 Move</span> 
         	<span class="timer"></span>
 
             <div class="restart">
-        		<i onclick="refresh()" class="fa fa-repeat"></i>
+        		<i onclick="window.location.reload()" class="fa fa-repeat"></i>
         	</div>
         </section>
 
@@ -84,11 +84,10 @@
         <div id="myModal" class="modal">
   			<!-- Modal content -->
 	  		<div class="modal-content">
-	    		<!-- <span class="close">&times;</span> -->
 	    		<p>Congratulations!!!!</p>
 	    		<p>You won!!!</p>
-	    		<p>Do you want to Play again?</p>
-	    		<button class="button" onclick="refresh()">Yes</button>
+	    		<p>Do you want to play again?</p>
+	    		<button class="button" onclick="window.location.reload()">Yes</button>
 	    		<button class="button" onclick="closeModal()">No</button>
 	  		</div>
 		</div>

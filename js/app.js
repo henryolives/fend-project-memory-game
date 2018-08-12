@@ -1,27 +1,30 @@
 /*
  * Create a list that holds all of your cards
  */
-let totalMove = document.querySelector('.moves')
-let cards = document.querySelectorAll('.card')
-let allCards = [...cards];
-const deck = document.querySelector('.deck')
-let openedCards = []
-let counter = 0
-let umatchCount = 0
-let start = 0
-// Get the modal
+let totalMove = document.querySelector('.moves');
+const cards = document.querySelectorAll('.card');
+const allCards = [...cards];
+const deck = document.querySelector('.deck');
+let openedCards = [];
+let counter = 0;
+let umatchCount = 0;
+let start = 0;
 const modal = document.getElementById('myModal');
+let star = document.querySelector('.star');
+const starParent = document.querySelector('.stars');
 
 
-document.body.onload = refresh()
+document.body.onload = refresh();
 
 function refresh() {
+	totalMove.textContent = '0 Move';
 	modal.style.display = "none";
 	for (let card of shuffle(allCards)) {
-		deck.appendChild(card)
-		card.classList.remove('open', 'show', 'match')	
+		deck.appendChild(card);
+		card.classList.remove('open', 'show', 'match');
 	}
-	openedCards.length = 0
+	openedCards.length = 0;
+	startTime();
 }
 
 /*
@@ -35,7 +38,6 @@ function refresh() {
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -43,7 +45,6 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
@@ -60,125 +61,151 @@ function shuffle(array) {
  */
 
 
-startGame()
+startGame();
 
-function startGame(){
+
+function startGame() {
 	for (let card of allCards) {
 		card.addEventListener("click", function(){
-			openCard(card)
-			matchCards()
-			moveCounter()
-			startTime(umatchCount)
-			showModal(counter)
+			openCard(card);
+			matchCards();
+			moveCounter();
+			showModal(counter);
+			starRating();
 		})
 	}
 }
-
 
 
 function addToList(card) {
 	if (openedCards.length <= 1) {
-		openedCards.push(card.children[0].classList.value)
+		openedCards.push(card.children[0].classList.value);
 	} else {
 		if (openedCards[0].localeCompare(card.children[0].classList.value) != 0) {
-			openedCards.shift()
-			openedCards.push(card.children[0].classList.value)
+			openedCards.shift();
+			openedCards.push(card.children[0].classList.value);
 		}
 	}
 }
 
+/*
+*	check if there is atmost 1 item, 
+*	if not remove the first one and replace with the current one
+*/
 
 function openCard(card) {
-	start = 1
 	if (!card.classList.contains('open')) {
-		card.classList.add('open', 'show')
-		//check if there is atmost 1 item, if not remove the first one and replace with the current one
-		addToList(card)
+		card.classList.add('open', 'show');
+
+		addToList(card);
 	}
 } 
 
+/*
+*	check if an unmatched card is open, show that its unmacthed briefly and hide it
+*	clear the list of opened cards
+*/
 
 function hideUmatchedCards(element) {
 	if (element.parentElement.classList.contains('open')) {
-		//umatchCount += 1/2
-			element.parentElement.classList.add('unmatch')
-			setTimeout(function() {
-				element.parentElement.classList.remove('unmatch','open','show')
-			},300)
-		}
-		openedCards.length = 0
+		element.parentElement.classList.add('unmatch');
+		setTimeout(function() {
+			element.parentElement.classList.remove('unmatch','open','show');
+		},300)
 	}
+	openedCards.length = 0;
+}
 
+/*
+ *	Check if the children of the cards in openedCards have the same classes.
+ *	If they do, add match class to both cards and clear the list.
+ *	If not, hide the cards.
+ */
 
 function matchCards() {
-	//check if the list items are the same and apply match 
 	if (openedCards.length > 1 && openedCards[0].localeCompare(openedCards[1]) == 0) {
-		let matched = document.querySelectorAll(`.${openedCards[1].substring(3,openedCards[1].length)}`)
+		let matched = document.querySelectorAll(`.${openedCards[1].substring(3,openedCards[1].length)}`);
 		matched.forEach(function(element){
-			element.parentElement.classList.add('match')
-			counter += 1/2
+			element.parentElement.classList.add('match');
+			counter += 1/2;
 		})
-		openedCards.length = 0
+		openedCards.length = 0;
 	} else {
-			umatchCount += 1/2
+		umatchCount += 1/2;
 		setTimeout(function() {
 			if (openedCards.length > 1 && openedCards[0].localeCompare(openedCards[1]) != 0) {
-				let unmatched = document.querySelectorAll(`.${openedCards[0].substring(3,openedCards[0].length)}`)
-				let unmatchedtwo = document.querySelectorAll(`.${openedCards[1].substring(3,openedCards[1].length)}`)
-				unmatchedtwo.forEach(hideUmatchedCards)
-				unmatched.forEach(hideUmatchedCards)
+				let unmatched = document.querySelectorAll(`.${openedCards[0].substring(3,openedCards[0].length)}`);
+				let unmatchedtwo = document.querySelectorAll(`.${openedCards[1].substring(3,openedCards[1].length)}`);
+				unmatchedtwo.forEach(hideUmatchedCards);
+				unmatched.forEach(hideUmatchedCards);
 			}
-		},300)
+		},300);
 	}
 }
 
+
 function moveCounter() {
 	let total = Math.floor(0.5*counter + umatchCount);
-	if (total > 1 || total ==0) {
+	if (total > 1 ) {
 		totalMove.textContent = `${total}  Moves`;
 	} else {
 		totalMove.textContent = `${total}  Move`;
 	}
-	
 }
 
-let time = 0;
-let timeLaps = document.querySelector('.timer');
+function starRating() {
+	let total = Math.floor(0.5*counter + umatchCount);
+	if (total == 8 && umatchCount ==0) {
+		starParent.appendChild(star.cloneNode(true));
+		starParent.appendChild(star.cloneNode(true));
+	}
+	if (counter == 8 && total <= 15) {
+		starParent.appendChild(star.cloneNode(true));
+	}
+	if (total == 15) {
+		starParent.removeChild(starParent.childNodes[0]);
+	}
 
-function startTime() {
-	if (umatchCount > 0 && counter < 8) {
-	setTimeout(function () {
-		time++;
-		let hr = Math.floor(time/1000/60/60);
-		let min = Math.floor((time/100/60) % 60);
-		let sec = Math.floor((time/10) % 60);
-		let tenths = time % 10;
-		timeLaps.textContent = `${hr}:${min}:${sec}:${tenths}`;
-		startTime();
-	},100);
+	if (total == 20) {
+		starParent.removeChild(starParent.childNodes[0]);
 	}
 }
 
 
-if (counter > 0 ) {
-	startTime()
+let time = 0;
+let timeLaps = document.querySelector('.timer');
+
+
+function startTime() {
+	if (counter < 8) {
+		setTimeout(function () {
+			time++;
+			let hr = Math.floor((time/3600) % 60);
+			let min = Math.floor((time/60) % 60);
+			let sec = Math.floor(time % 60);
+			timeLaps.textContent = `${hr}:${min}:${sec}`;
+			startTime();
+		},1000);
+	}
 }
 
 
-function showModal(counter){
+
+function showModal(counter) {
 	if (counter === 8 ){
-			modal.style.display = "block";
-		}
+		modal.style.display = "block";
+	}
 }
 
 
 // Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+const span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on <span> (x), close the modal
 function closeModal() {
     modal.style.display = "none";
 }
+
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
