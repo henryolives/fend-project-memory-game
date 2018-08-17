@@ -69,6 +69,7 @@ h1 {
     transform: rotateY(0);
     background: #02b3e4;
     cursor: default;
+    pointer-events: none;
 }
 
 .deck .card.show {
@@ -99,6 +100,10 @@ h1 {
     animation-duration: .5s;
 
 }
+
+/* .img {
+  pointer-events: none;
+} */
 
 @keyframes stretch {
     0% {
@@ -206,6 +211,20 @@ h1 {
     margin: 4px 2px;
     cursor: pointer;
 }
+
+.modalStars {
+    /* //list-style-type: none; */
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+ul .modalStars li {
+    list-style: none;
+    display: inline-block;
+}
+
+
 
 /*
  * Styles for media queries

@@ -2,6 +2,8 @@
  * Create a list that holds all of your cards
  */
 let totalMove = document.querySelector('.moves');
+let spanMove = document.querySelector('.spanMoves');
+let spanTimer = document.querySelector('.spanTimer');
 const cards = document.querySelectorAll('.card');
 const allCards = [...cards];
 const deck = document.querySelector('.deck');
@@ -10,8 +12,12 @@ let counter = 0;
 let umatchCount = 0;
 let start = 0;
 const modal = document.getElementById('myModal');
-let star = document.querySelector('.star');
+let totalStars = document.querySelectorAll('.star');
 const starParent = document.querySelector('.stars');
+let modalStars = document.querySelector('.modalStars');
+let finalStars = [...totalStars];
+let time = 0;
+let timeLaps = document.querySelector('.timer');
 
 
 document.body.onload = refresh();
@@ -24,7 +30,6 @@ function refresh() {
 		card.classList.remove('open', 'show', 'match');
 	}
 	openedCards.length = 0;
-	startTime();
 }
 
 /*
@@ -70,8 +75,8 @@ function startGame() {
 			openCard(card);
 			matchCards();
 			moveCounter();
-			showModal(counter);
 			starRating();
+			showModal(counter);
 		})
 	}
 }
@@ -96,7 +101,6 @@ function addToList(card) {
 function openCard(card) {
 	if (!card.classList.contains('open')) {
 		card.classList.add('open', 'show');
-
 		addToList(card);
 	}
 } 
@@ -139,13 +143,16 @@ function matchCards() {
 				unmatchedtwo.forEach(hideUmatchedCards);
 				unmatched.forEach(hideUmatchedCards);
 			}
-		},300);
+		},200);
 	}
 }
 
 
 function moveCounter() {
 	let total = Math.floor(0.5*counter + umatchCount);
+	if ( total == 0) {
+		startTime();
+	}
 	if (total > 1 ) {
 		totalMove.textContent = `${total}  Moves`;
 	} else {
@@ -153,31 +160,29 @@ function moveCounter() {
 	}
 }
 
-function starRating() {
-	let total = Math.floor(0.5*counter + umatchCount);
-	if (total == 8 && umatchCount ==0) {
-		starParent.appendChild(star.cloneNode(true));
-		starParent.appendChild(star.cloneNode(true));
-	}
-	if (counter == 8 && total <= 15) {
-		starParent.appendChild(star.cloneNode(true));
-	}
-	if (total == 15) {
-		starParent.removeChild(starParent.childNodes[0]);
-	}
 
-	if (total == 20) {
-		starParent.removeChild(starParent.childNodes[0]);
+
+function starRating() {
+	let total = 0.5*counter + umatchCount;
+	if (total <= 15 && counter ==8) {
+		starParent.appendChild(totalStars[0].cloneNode(true));
+		finalStars.push(totalStars[0])
+	}
+	if (total == 16) {
+		finalStars.splice(-1, 1);
+		starParent.removeChild(totalStars[0]);	
+	}
+	if (total == 20 ) {
+		starParent.children[0].remove()
+		finalStars.splice(-1, 1);
 	}
 }
 
 
-let time = 0;
-let timeLaps = document.querySelector('.timer');
 
 
 function startTime() {
-	if (counter < 8) {
+	if (counter < 7) {
 		setTimeout(function () {
 			time++;
 			let hr = Math.floor((time/3600) % 60);
@@ -190,20 +195,16 @@ function startTime() {
 }
 
 
-
 function showModal(counter) {
-	if (counter === 8 ){
-		modal.style.display = "block";
-	}
-}
-
-
-// Get the <span> element that closes the modal
-const span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-function closeModal() {
-    modal.style.display = "none";
+	let total = Math.floor(0.5*counter + umatchCount);
+		if (counter === 8 ) {
+			modal.style.display = "block";
+			spanTimer.textContent = timeLaps.textContent;
+			spanMove.textContent = total + ' Moves';
+			for (let i = 0; i < finalStars.length; i++ ) {
+				modalStars.appendChild(totalStars[0].cloneNode(true));
+			}
+		}
 }
 
 
