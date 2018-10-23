@@ -8,7 +8,7 @@
 
 ## Installation
 * Download the zip copy of the repository.
-* copy the 'fend-project-memory-game-master-master' folder to a desired location on your computer
+* copy the 'memory-game' folder to a desired location on your computer
 * double-click on the index file to open the game.
 
 
